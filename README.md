@@ -1,12 +1,7 @@
-# Fullstack Java Project Team NN
+# Fullstack Java Project
 
-## Team members
-
-:heavy_check_mark:_(COMMENT) Add your team members below and remove this comment. Also, fill out your team number in the title._
-
-- Member 1
-- Member 2
-- Member 3
+## Firstname Lastname (Class)
+Change the name and Class in the title above
 
 ## Folder structure
 
