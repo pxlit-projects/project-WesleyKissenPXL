@@ -1,7 +1,6 @@
 # Fullstack Java Project
 
-## Firstname Lastname (Class)
-Change the name and Class in the title above
+## Wesley Kissen 3AONC
 
 ## Folder structure
 
