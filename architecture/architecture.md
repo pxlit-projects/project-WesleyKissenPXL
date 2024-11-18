@@ -34,7 +34,7 @@ Het systeem bestaat uit drie afzonderlijke microservices, elk met hun eigen vera
 - **MySQL Database**: Slaat beoordelingsgegevens op.
 - **Open Feign Communicatie**: Kan andere services raadplegen via Open Feign.
 
-## 4. Open Feign Communicatie
+## 4. Open Feign Communicatie (synchroon)
 **Open Feign** is een declaratieve HTTP-client die het eenvoudig maakt om HTTP-verzoeken naar andere microservices te sturen.
 
 - Elke microservice kan direct met andere microservices communiceren (synchroon) via Open Feign, zonder dat de **API Gateway** nodig is.
