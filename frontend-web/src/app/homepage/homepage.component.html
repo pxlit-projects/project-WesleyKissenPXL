@@ -1,0 +1,16 @@
+<div class="container">
+  <nav>
+    <ul>
+      <li><a routerLink="/homepage">Home</a></li>
+      <li *If="isAdmin"><a routerLink="/admin">Admin Dashboard</a></li>
+      <li><a href="#" (click)="logout()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <section class="welcome">
+    <h1>Welcome to the Homepage</h1>
+    <p If="user">Hello, {{ user!.userName }}!</p>
+    <p If="!user">Please log in to access more features.</p>
+  </section>
+</div>
+    

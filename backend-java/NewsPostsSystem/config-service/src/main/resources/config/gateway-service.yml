@@ -1,0 +1,50 @@
+server:
+  port: 8093
+
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin
+        - DedupeResponseHeader=Access-Control-Allow-Methods
+        - DedupeResponseHeader=Access-Control-Allow-Headers
+        - DedupeResponseHeader=Access-Control-Allow-Credentials
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200, http://127.0.0.1:4200"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: comment-service
+          uri: lb://comment-service
+          predicates:
+            - Path=/comment/**
+          filters:
+            - RewritePath=/comment/(?<path>.*), /$\{path}
+        - id: post-service
+          uri: lb://post-service
+          predicates:
+            - Path=/post/**
+          filters:
+            - RewritePath=/post/(?<path>.*), /$\{path}
+        - id: review-service
+          uri: lb://review-service
+          predicates:
+            - Path=/review/**
+          filters:
+            - RewritePath=/review/(?<path>.*), /$\{path}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8081/eureka/
