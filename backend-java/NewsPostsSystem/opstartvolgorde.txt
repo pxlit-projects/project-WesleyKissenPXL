@@ -1,0 +1,7 @@
+Docker compose up
+Config
+Discovery
+Gateway
+Review
+Post
+Comment
