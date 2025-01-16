@@ -1,5 +1,5 @@
 <div class="max-w-2xl mx-auto mt-20 p-8 bg-gradient-to-br from-indigo-600 to-purple-500 rounded-lg shadow-lg text-white">
-  <h2 class="text-3xl font-bold mb-8 text-center">Welcome</h2>
+  <h2 class="text-3xl font-bold mb-8 text-center">Welcome {{username}}</h2>
 
   <div class="mb-6 text-center">
     <button
@@ -124,7 +124,7 @@
           <!-- Add Comment Form -->
           <form (ngSubmit)="addComment(post.id)" class="mt-4">
             <textarea [(ngModel)]="newComments[post.id]" name="comment-{{ post.id }}" placeholder="Add a comment" class="p-2 rounded-lg shadow-md w-full text-black"></textarea>
-            <button type="submit" class="mt-2 py-1 px-4 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-400">Post Comment</button>
+            <button type="submit" class="mt-2 py-1 px-4 bg-teal-500 text-white rounded-lg shadow-md hover:bg-teal-400">Post Comment</button>
           </form>
         </div>
     </div>
