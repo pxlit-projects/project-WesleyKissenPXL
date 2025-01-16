@@ -126,15 +126,7 @@ class PostServiceTest {
         verify(postRepository).getPostsByStatus(Status.POSTED);
     }
 
-    @Test
-    void testFilterPosts() {
-        when(postRepository.findAll()).thenReturn(List.of(new Post()));
 
-        List<PostResponse> responses = postService.filterPosts("Content", "Author", "2025-01-01", "2025-01-31", "gebruiker");
-
-        assertNotNull(responses);
-        verify(postRepository).findAll();
-    }
 
     @Test
     void testAddPostAsConcept() {
@@ -292,5 +284,105 @@ class PostServiceTest {
         assertNotNull(responses);
         assertTrue(responses.isEmpty());
         verify(postRepository).getPostsByStatus(Status.CONCEPT);
+    }
+
+    @Test
+    void testFilterPosts_ByContent() {
+        // Arrange
+        List<Post> posts = List.of(
+                new Post(postId, "Title", "This is a post about content", "Author", LocalDateTime.now(), Status.POSTED, ""),
+                new Post(UUID.randomUUID(), "Another Title", "Content not matching", "Another Author", LocalDateTime.now(), Status.POSTED, "")
+        );
+        when(postRepository.getPostsByStatus(Status.POSTED)).thenReturn(posts);
+
+        // Act
+        List<PostResponse> responses = postService.filterPosts("content", null, null, null, "gebruiker");
+
+        // Assert
+        assertNotNull(responses);
+        assertEquals(1, responses.size());
+        assertTrue(responses.get(0).getContent().contains("content"));
+        verify(postRepository).getPostsByStatus(Status.POSTED);
+    }
+
+    @Test
+    void testFilterPosts_ByAuthor() {
+        // Arrange
+        List<Post> posts = List.of(
+                new Post(postId, "Title", "Some content", "Author", LocalDateTime.now(), Status.POSTED, ""),
+                new Post(UUID.randomUUID(), "Another Title", "More content", "Different Author", LocalDateTime.now(), Status.POSTED, "")
+        );
+        when(postRepository.getPostsByStatus(Status.POSTED)).thenReturn(posts);
+
+        // Act
+        List<PostResponse> responses = postService.filterPosts(null, "Author", null, null, "gebruiker");
+
+        // Assert
+        assertNotNull(responses);
+        assertEquals(1, responses.size());
+        assertEquals("Author", responses.get(0).getAuthor());
+        verify(postRepository).getPostsByStatus(Status.POSTED);
+    }
+
+    @Test
+    void testFilterPosts_ByContentAndAuthor() {
+        // Arrange
+        List<Post> posts = List.of(
+                new Post(postId, "Title", "Content about post", "Author", LocalDateTime.now(), Status.POSTED, ""),
+                new Post(UUID.randomUUID(), "Another Title", "Content not matching", "Author", LocalDateTime.now(), Status.POSTED, "")
+        );
+        when(postRepository.getPostsByStatus(Status.POSTED)).thenReturn(posts);
+
+        // Act
+        List<PostResponse> responses = postService.filterPosts("post", "Author", null, null, "gebruiker");
+
+        // Assert
+        assertNotNull(responses);
+        assertEquals(1, responses.size());
+        assertTrue(responses.get(0).getContent().contains("post"));
+        assertEquals("Author", responses.get(0).getAuthor());
+        verify(postRepository).getPostsByStatus(Status.POSTED);
+    }
+
+    @Test
+    void testFilterPosts_InvalidDateFormat() {
+        // Arrange
+        when(postRepository.getPostsByStatus(Status.POSTED)).thenReturn(Collections.emptyList());
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> postService.filterPosts(null, null, "invalid-date", "2025-01-01", "gebruiker"));
+        assertEquals("Invalid date format. Please use the format 'yyyy-MM-dd'.", exception.getMessage());
+    }
+
+    @Test
+    void testFilterPosts_EmptyResult() {
+        // Arrange
+        when(postRepository.getPostsByStatus(Status.POSTED)).thenReturn(Collections.emptyList());
+
+        // Act
+        List<PostResponse> responses = postService.filterPosts("Non matching content", "Non matching author", null, null, "gebruiker");
+
+        // Assert
+        assertNotNull(responses);
+        assertTrue(responses.isEmpty());
+        verify(postRepository).getPostsByStatus(Status.POSTED);
+    }
+
+    @Test
+    void testFilterPosts_NoFiltersApplied() {
+        // Arrange
+        List<Post> posts = List.of(
+                new Post(postId, "Title", "Content", "Author", LocalDateTime.now(), Status.POSTED, ""),
+                new Post(UUID.randomUUID(), "Another Title", "Another Content", "Another Author", LocalDateTime.now(), Status.POSTED, "")
+        );
+        when(postRepository.getPostsByStatus(Status.POSTED)).thenReturn(posts);
+
+        // Act
+        List<PostResponse> responses = postService.filterPosts(null, null, null, null, "gebruiker");
+
+        // Assert
+        assertNotNull(responses);
+        assertEquals(2, responses.size());
+        verify(postRepository).getPostsByStatus(Status.POSTED);
     }
 }

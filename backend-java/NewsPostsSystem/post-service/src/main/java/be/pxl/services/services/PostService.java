@@ -146,7 +146,7 @@ public class PostService implements IPostService{
     public List<PostResponse> filterPosts(String content, String author, String fromDate, String toDate, String userRole) {
         checkUserRoleAllUsers(userRole);
         log.info("Filtering posts");
-        List<Post> filteredPosts = postRepository.findAll();
+        List<Post> filteredPosts = postRepository.getPostsByStatus(Status.POSTED);
 
         if (content != null && !content.isEmpty()) {
             filteredPosts = filteredPosts.stream()
