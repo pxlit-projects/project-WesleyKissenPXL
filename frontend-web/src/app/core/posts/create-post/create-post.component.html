@@ -1,0 +1,63 @@
+<div class="max-w-2xl mx-auto mt-20 p-8 bg-gradient-to-br from-indigo-600 to-purple-500 rounded-lg shadow-lg text-white">
+    <h2 class="text-3xl font-bold mb-8 text-center">Add Post</h2>
+  
+    <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+      <div class="mb-6">
+        <label for="title" class="block text-sm font-medium">Title</label>
+        <input
+          type="text"
+          id="title"
+          formControlName="title"
+          class="mt-2 w-full px-4 py-3 border-2 border-transparent rounded-lg bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition ease-in-out duration-300"
+          placeholder="Enter title"
+        >
+        @if (postForm.get('title')?.touched && postForm.get('title')?.hasError('required')){
+            <div class="text-red-500 text-sm mt-1">Title is required</div>
+        }
+      </div>
+  
+      <div class="mb-6">
+        <label for="content" class="block text-sm font-medium">Content</label>
+        <input
+          type="text"
+          id="content"
+          formControlName="content"
+          class="mt-2 w-full px-4 py-3 border-2 border-transparent rounded-lg bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition ease-in-out duration-300"
+          placeholder="Enter content"
+        >
+        @if (postForm.get('content')?.touched && postForm.get('content')?.hasError('required')){
+            <div class="text-red-500 text-sm mt-1">Content is required</div>
+        }
+      </div>
+  
+      <div class="mb-6">
+        <label for="author" class="block text-sm font-medium">Author</label>
+        <input
+          type="text"
+          id="author"
+          formControlName="author"
+          class="mt-2 w-full px-4 py-3 border-2 border-transparent rounded-lg bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition ease-in-out duration-300"
+          placeholder="Enter author name"
+        >
+        @if (postForm.get('author')?.touched && postForm.get('author')?.hasError('required')){
+            <div class="text-red-500 text-sm mt-1">Author is required</div>
+        }
+      </div>
+  
+      <div class="mb-6 text-center flex gap-4 justify-center">
+        <button
+            type="submit"
+            class="py-3 px-6 bg-gradient-to-r from-indigo-600 to-purple-700 text-white font-semibold rounded-lg shadow-lg hover:from-indigo-500 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-300 transform hover:scale-105"
+            [disabled]="!postForm.valid">
+            Add Post
+        </button>
+        <button
+            type="button"
+            class="py-3 px-6 bg-gradient-to-r from-gray-600 to-gray-800 text-white font-semibold rounded-lg shadow-lg hover:from-gray-500 hover:to-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-300 transform hover:scale-105"
+            (click)="addAsConcept()"
+            [disabled]="!postForm.valid">
+            Add as Concept
+        </button>
+    </div>
+    </form>
+  </div>

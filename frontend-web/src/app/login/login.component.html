@@ -1,2 +1,26 @@
-
-  
+<form (ngSubmit)="onLogin()" class="max-w-2xl mx-auto mt-20 p-8 bg-gradient-to-br from-indigo-600 to-purple-500 rounded-lg shadow-lg text-white">
+    <h2 class="text-3xl font-bold mb-8 text-center">Welcome Back!</h2>
+    
+    <div class="mb-6">
+      <label for="username" class="block text-sm font-medium">Username</label>
+      <input [(ngModel)]="userName" name="username" type="text" id="username" class="mt-2 w-full px-4 py-3 border-2 border-transparent rounded-lg bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition ease-in-out duration-300" placeholder="Enter your username">
+    </div>
+    
+    <div class="mb-6">
+        <label for="role" class="block text-sm font-medium">Role</label>
+        <select [(ngModel)]="role" name="role" id="role" class="mt-2 w-full px-4 py-3 border-2 border-transparent rounded-lg bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition ease-in-out duration-300">
+          <option value="" disabled selected>Select your role</option>
+          <option value="hoofdredacteur">Hoofdredacteur</option>
+          <option value="redacteur">Redacteur</option>
+          <option value="gebruiker">Gebruiker</option>
+        </select>
+      </div>
+    <div class="mb-6 text-center">
+      <button type="submit" class="w-full py-3 px-6 bg-gradient-to-r from-indigo-600 to-purple-700 text-white font-semibold rounded-lg shadow-lg hover:from-indigo-500 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-300 transform hover:scale-105">Login</button>
+    </div>
+    @if (showerror){
+        <div  class="mt-4 p-4 bg-red-100 text-red-700 rounded-lg shadow">
+            {{ errorMessage }}
+        </div>
+    }
+</form>

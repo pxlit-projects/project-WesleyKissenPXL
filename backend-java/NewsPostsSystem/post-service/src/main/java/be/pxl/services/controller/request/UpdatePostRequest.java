@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class UpdatePostRequest {
     private String title;
     private String content;
+    private String author;
 }

@@ -1,34 +1,37 @@
-import { Component, inject } from '@angular/core';
 import { AuthService } from '@services/auth-service.service';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {FormsModule} from '@angular/forms';
+import {Component} from '@angular/core';
 
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
+ imports: [
+  FormsModule
+ ]
 })
+
+
+
 export class LoginComponent {
-  // Dependency injection for services and FormBuilder
-  authService: AuthService = inject(AuthService);
-  fb: FormBuilder = inject(FormBuilder);
+  userName: string = '';
+  role: string = '';
+  errorMessage: string = '';
+  showerror: boolean = false;
 
-  // Reactive form for login
-  loginForm = this.fb.group({
-    username: ['', Validators.required],
-    role: ['redacteur', Validators.required]
-  });
+  constructor(private authService: AuthService) {}
 
-  login(): void {
-    if (this.loginForm.valid) {
-      const username = this.loginForm.get('username')?.value;
-      const role = this.loginForm.get('role')?.value;
-      this.authService.login(username!, role!);
+  onLogin(): void {
+    if (this.userName && this.role) {
+      if(!this.authService.login(this.userName, this.role)){
+        this.showerror = true;
+        this.errorMessage = 'Invalid username or role.';
+        return;
+      }
+      this.errorMessage = '';
+    } else {
+      this.showerror = true;
+      this.errorMessage = 'Please enter both username and role.';
     }
-  }
-
-  isFormInvalid() {
-    return this.loginForm.invalid;
   }
 }

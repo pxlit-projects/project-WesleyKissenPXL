@@ -1,6 +1,5 @@
 package be.pxl.services.controller.request;
 
-import be.pxl.services.domain.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

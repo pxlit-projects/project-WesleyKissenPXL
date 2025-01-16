@@ -19,19 +19,29 @@ public class ReviewController {
     private final IReviewService reviewService;
 
     @GetMapping("/getAllReviewablePosts")
-    public ResponseEntity<List<ReviewPostDTO>> getAllReviewablePosts() {
-        return new ResponseEntity<>(reviewService.getAllReviewablePosts(), HttpStatus.OK);
+    public ResponseEntity<List<ReviewPostDTO>> getAllReviewablePosts(@RequestHeader("Role") String userRole) {
+        return new ResponseEntity<>(reviewService.getAllReviewablePosts(userRole), HttpStatus.OK);
     }
 
 
-    @PostMapping("/{postId}/reject")
+    @PutMapping("/{postId}/reject")
     public ResponseEntity<ReviewPostDTO> reject(
+            @RequestHeader("Role") String userRole,
             @PathVariable UUID postId,
             @RequestBody RejectionMessageRequest rejectionMessage) {
 
-        ReviewPostDTO reviewPost = reviewService.rejectPost(postId, rejectionMessage);
+        ReviewPostDTO reviewPost = reviewService.rejectPost(postId, rejectionMessage, userRole);
 
         return ResponseEntity.ok(reviewPost);
     }
 
+    @PutMapping("/{postId}/publishReviewPost")
+    public ResponseEntity<ReviewPostDTO> publish(
+            @RequestHeader("Role") String userRole,
+            @PathVariable UUID postId) {
+
+        ReviewPostDTO reviewPost = reviewService.publishPost(postId, userRole);
+
+        return ResponseEntity.ok(reviewPost);
+    }
 }

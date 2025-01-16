@@ -1,16 +1,138 @@
-<div class="container">
-  <nav>
-    <ul>
-      <li><a routerLink="/homepage">Home</a></li>
-      <li *If="isAdmin"><a routerLink="/admin">Admin Dashboard</a></li>
-      <li><a href="#" (click)="logout()">Logout</a></li>
-    </ul>
-  </nav>
+<div class="max-w-2xl mx-auto mt-20 p-8 bg-gradient-to-br from-indigo-600 to-purple-500 rounded-lg shadow-lg text-white">
+  <h2 class="text-3xl font-bold mb-8 text-center">Welcome</h2>
 
-  <section class="welcome">
-    <h1>Welcome to the Homepage</h1>
-    <p If="user">Hello, {{ user!.userName }}!</p>
-    <p If="!user">Please log in to access more features.</p>
-  </section>
+  <div class="mb-6 text-center">
+    <button
+      class="w-full py-3 px-6 bg-gradient-to-r from-red-500 to-orange-600 text-white font-semibold rounded-lg shadow-lg hover:from-red-400 hover:to-orange-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-300 transform hover:scale-105"
+      (click)="onLogout()">
+      Logout
+    </button>
+  </div>
+  @if(this.role == "redacteur" || this.role == "hoofdredacteur"){
+    <div class="mb-6 text-center">
+      <button
+        class="w-full py-3 px-6 bg-gradient-to-r from-green-500 to-teal-600 text-white font-semibold rounded-lg shadow-lg hover:from-green-400 hover:to-teal-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-300 transform hover:scale-105"
+        (click)="CreatePostRedirect()">
+        Go To Add Post
+      </button>
+    </div>
+  }
+  @if(this.role == "redacteur" || this.role == "hoofdredacteur"){
+    <div class="mb-6 text-center">
+      <button
+        class="w-full py-3 px-6 bg-gradient-to-r from-orange-500 to-red-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-400 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-300 transform hover:scale-105"
+        (click)="GoToPostConcepts()">
+       Go to concepts
+      </button>
+    </div>
+  }
+  @if(this.role == "hoofdredacteur"){
+    <div class="mb-6 text-center">
+      <button
+        class="w-full py-3 px-6 bg-gradient-to-r from-pink-500 to-yellow-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-400 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-300 transform hover:scale-105"
+        (click)="GoToPostWaitingApprovals()">
+       Posts waiting for approval
+      </button>
+    </div>
+  }
+  @if(this.role == "redacteur" || this.role == "hoofdredacteur"){
+    <div class="mb-6 text-center">
+      <button
+        class="w-full py-3 px-6 bg-gradient-to-r from-blue-500 to-pink-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-400 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-300 transform hover:scale-105"
+        (click)="GoToNotifications()">
+       Go to notifications
+      </button>
+    </div>
+  }
+  <!-- Posts Section -->
+
+  <!-- Search Form -->
+  <div class="mb-6">
+    <form (ngSubmit)="onSearch()">
+      <div class="flex flex-wrap space-y-4">
+        <div class="flex space-x-4 w-full">
+          <input 
+            [(ngModel)]="searchParams.content" 
+            name="content" 
+            type="text" 
+            placeholder="Search by content" 
+            class="p-2 rounded-lg shadow-md w-1/2 text-black" />
+          <input 
+            [(ngModel)]="searchParams.author" 
+            name="author" 
+            type="text" 
+            placeholder="Search by author" 
+            class="p-2 rounded-lg shadow-md w-1/2 text-black" />
+        </div>
+        <div class="flex space-x-4 w-full">
+          <input 
+            [(ngModel)]="searchParams.fromDate" 
+            name="fromDate" 
+            type="date" 
+            class="p-2 rounded-lg shadow-md w-1/2 text-black" />
+          <input 
+            [(ngModel)]="searchParams.toDate" 
+            name="toDate" 
+            type="date" 
+            class="p-2 rounded-lg shadow-md w-1/2 text-black" />
+        </div>
+        <div class="w-full text-center mt-4">
+          <button 
+            type="submit" 
+            class="py-2 px-4 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-400">
+            Search
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+  <h2 class="text-3xl font-bold mb-8 text-center">Posts</h2>
+  @for(post of posts; track post.id){
+    <div class="mb-6 bg-white text-black p-4 rounded-lg shadow-md">
+        <h3 class="text-2xl font-bold text-indigo-700 mb-2">{{ post.title }}</h3>
+        <p class="text-gray-600 mb-2">Auteur: <span class="text-gray-800 font-medium">{{ post.author }}</span></p>
+        <p class="text-gray-700 mb-4">{{ post.content }}</p>
+
+        <!-- Comments Section -->
+        <div class="mt-4">
+          <h4 class="font-bold text-indigo-700 mb-2">Comments:</h4>
+          <div>
+            @for(comment of getCommentsByPostId(post.id); track comment.id){
+              <p class="mb-2 border-b border-gray-200 pb-2">
+                <span class="font-medium">{{ comment.author }}</span>: {{ comment.comment }}
+              </p>
+              @if(comment.author === username){
+                <button 
+        class="ml-4 py-1 px-3 bg-yellow-500 text-white rounded-lg shadow-md hover:bg-yellow-400"
+        (click)="onEditComment(comment)">
+        Edit
+      </button>
+      <button 
+        class="ml-4 py-1 px-3 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-400"
+        (click)="onDeleteComment(comment.id)">
+        Delete
+      </button>
+              }
+            }
+          </div>
+          @if(!hasComments(post.id)){
+            <p class="text-gray-600">No comments yet. Be the first to comment!</p>
+          }
+
+          <!-- Add Comment Form -->
+          <form (ngSubmit)="addComment(post.id)" class="mt-4">
+            <textarea [(ngModel)]="newComments[post.id]" name="comment-{{ post.id }}" placeholder="Add a comment" class="p-2 rounded-lg shadow-md w-full text-black"></textarea>
+            <button type="submit" class="mt-2 py-1 px-4 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-400">Post Comment</button>
+          </form>
+        </div>
+    </div>
+  }
+  @if(posts.length === 0){
+    <div class="text-center text-white mt-6">
+        <p>There are no posts right now!</p>
+    </div>
+  } 
 </div>
     

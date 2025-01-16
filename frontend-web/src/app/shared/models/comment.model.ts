@@ -1,10 +1,12 @@
 export class Comment {
-  content: string;
+  id: string;
+  comment: string;
   author: string;
   postId: string;
 
-  constructor(content: string, author: string, postId: string) {
-    this.content = content;
+  constructor(id: string, comment: string, author: string, postId: string) {
+    this.id = id;
+    this.comment = comment;
     this.author = author;
     this.postId = postId;
   }

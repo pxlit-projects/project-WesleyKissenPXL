@@ -1,0 +1,29 @@
+<div class="max-w-2xl mx-auto mt-20 p-8 bg-gradient-to-br from-indigo-600 to-purple-500 rounded-lg shadow-lg text-white">
+    <h2 class="text-3xl font-bold mb-8 text-center">Notifications</h2>
+  
+    @for(notification of notifications; track notification.id){
+        <div class="mb-6 bg-white text-black p-4 rounded-lg shadow-md">
+            <h3 class="text-2xl font-bold text-indigo-700 mb-2">{{ notification.postTitle }}</h3>
+            <p>{{ notification.rejectionReason }}</p>
+            <p class="text-gray-600 mb-2">Status: <span [ngClass]="{
+              'text-green-600': notification.status === 'POSTED',
+              'text-red-600': notification.status === 'REJECTED',
+            }" class="font-medium">{{ notification.status }}</span></p>
+
+            @if(notification.status === 'REJECTED'){
+                <button
+              (click)="handleNotificationClick(notification)"
+              class="py-2 px-5 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-semibold rounded-full shadow-md hover:from-blue-500 hover:to-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition transform hover:scale-110">
+              Bekijk Details
+            </button>
+            }
+            
+          </div>
+    }
+    @if(notifications.length === 0){
+        <div class="text-center text-white mt-6">
+            <p>Er zijn momenteel geen notificaties!</p>
+          </div>
+    }
+    
+  </div>

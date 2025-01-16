@@ -9,6 +9,22 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class QueueConfiguration {
+
+    @Bean
+    public Queue getApprovalQueue() {
+        return new Queue("Queuevoorbeeld1", false);
+    }
+
+    @Bean
+    public Queue get1ApprovalQueue() {
+        return new Queue("NieuweTestQue", true);
+    }
+
+    @Bean
+    public Queue getApprovalAnswerQueue() {
+        return new Queue("getApprovalAnswer", false);
+    }
+
     @Bean
     public Jackson2JsonMessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
@@ -21,16 +37,4 @@ public class QueueConfiguration {
         rabbitTemplate.setMessageConverter(messageConverter());
         return rabbitTemplate;
     }
-
-
-    @Bean
-    public Queue getApprovalQueue() {
-        return new Queue("getApproval", false);
-    }
-
-    @Bean
-    public Queue getApprovalAnswerQueue() {
-        return new Queue("getApprovalAnswer", false);
-    }
-
 }
