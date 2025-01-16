@@ -1,2 +1,3 @@
 # Complete this file for an Angular webapplication
 # tip: http://gitignore.io
+frontend-web/.angular/cache/*/*.pack
